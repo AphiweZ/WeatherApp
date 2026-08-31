@@ -1,0 +1,184 @@
+﻿
+@{
+    var weather = ViewBag.Weather;
+    var city = ViewBag.City;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Weather Dashboard</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #111827;
+            color: white;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 40px auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .search {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .search input {
+            padding: 12px;
+            width: 250px;
+            border-radius: 8px;
+            border: none;
+        }
+
+        .search button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .main-weather {
+            background: #1f2937;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .temperature {
+            font-size: 60px;
+            font-weight: bold;
+        }
+
+        .condition {
+            font-size: 22px;
+            text-transform: capitalize;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .card {
+            background: #1f2937;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .card h3 {
+            margin-bottom: 10px;
+            color: #9ca3af;
+        }
+
+        .card p {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .error {
+            background: #7f1d1d;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        @@media (max-width: 700px) {
+            .cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>🌤️ Weather Dashboard</h1>
+
+        <div class="search">
+
+            <form method="get" action="@Url.Action("Dashboard", "Weather")">
+
+                <input type="text"
+                       name="city"
+                       placeholder="Search city..."
+                       value="@city" />
+
+                <button type="submit">
+                    Search
+                </button>
+
+            </form>
+
+        </div>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="error">
+                @ViewBag.Error
+            </div>
+        }
+        else if (weather != null)
+        {
+            <div class="main-weather">
+
+                <h2>📍 @city</h2>
+
+                <div class="temperature">
+                    @weather.Main.Temp °C
+                </div>
+
+                <div class="condition">
+                    @weather.Weather[0].Description
+                </div>
+
+                <p>
+                    Feels like @weather.Main.Feels_Like °C
+                </p>
+
+            </div>
+
+            <div class="cards">
+
+                <div class="card">
+                    <h3>💧 Humidity</h3>
+                    <p>@weather.Main.Humidity %</p>
+                </div>
+
+                <div class="card">
+                    <h3>💨 Wind Speed</h3>
+                    <p>@weather.Wind.Speed m/s</p>
+                </div>
+
+                <div class="card">
+                    <h3>🌡️ Pressure</h3>
+                    <p>@weather.Main.Pressure hPa</p>
+                </div>
+
+                <div class="card">
+                    <h3>👁️ Visibility</h3>
+                    <p>@weather.Visibility m</p>
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+</body>
+</html>
